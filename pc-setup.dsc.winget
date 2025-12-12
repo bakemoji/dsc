@@ -1,0 +1,97 @@
+# yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
+properties:
+  assertions: []
+  resources:
+    # Windows Settings
+    - resource: Microsoft.Windows.Settings/WindowsSettings
+      directives:
+        description: Enable Developer Mode
+        allowPrerelease: true
+        securityContext: elevated
+      settings:
+        DeveloperMode: true
+    # App Install
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: PeaZip
+      directives:
+        description: Install PeaZip
+        allowPrerelease: false
+      settings:
+        id: Giorgiotani.Peazip
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: PowerShell
+      directives:
+        description: Install PowerShell
+        allowPrerelease: false
+      settings:
+        id: Microsoft.PowerShell
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: VSCode
+      directives:
+        description: Install VSCode
+        allowPrerelease: false
+      settings:
+        id: Microsoft.VisualStudioCode
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: DotNet10
+      directives:
+        description: Install DotNet10
+        allowPrerelease: false
+        securityContext: elevated
+      settings:
+        id: Microsoft.DotNet.SDK.10
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: VisualStudio
+      directives:
+        description: Install Visual Studio
+        allowPrerelease: false
+        securityContext: elevated
+      settings:
+        id: Microsoft.VisualStudio.Community
+        source: winget
+    # VS Workloads Install
+    - resource: Microsoft.VisualStudio.DSC/VSComponents
+      id: VS Desktop Workloads
+      dependsOn:
+        - VisualStudio
+      directives:
+        description: Install VS Desktop Workloads
+        allowPrerelease: false
+        securityContext: elevated
+      settings:
+        productId: Microsoft.VisualStudio.Product.Community
+        channelId: VisualStudio.18.Release
+        components:
+          - Microsoft.VisualStudio.Workload.ManagedDesktop
+    - resource: Microsoft.VisualStudio.DSC/VSComponents
+      id: VS WinUI Workloads
+      dependsOn:
+        - VisualStudio
+      directives:
+        description: Install VS WinUI Workloads
+        allowPrerelease: false
+        securityContext: elevated
+      settings:
+        productId: Microsoft.VisualStudio.Product.Community
+        channelId: VisualStudio.18.Release
+        components:
+          - Microsoft.VisualStudio.Workload.Universal
+    - resource: Microsoft.VisualStudio.DSC/VSComponents
+      id: VS Web Workloads
+      dependsOn:
+        - VisualStudio
+      directives:
+        description: Install VS Web Workloads
+        allowPrerelease: false
+        securityContext: elevated
+      settings:
+        productId: Microsoft.VisualStudio.Product.Community
+        channelId: VisualStudio.18.Release
+        components:
+          - Microsoft.VisualStudio.Workload.NetWeb
+
+  configurationVersion: 0.2.0
